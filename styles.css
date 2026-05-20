@@ -69,8 +69,9 @@ a {
 
 .logo {
   font-family: "Bebas Neue", sans-serif;
-  font-size: clamp(1.25rem, 3vw, 1.5rem);
-  letter-spacing: 0.04em;
+  font-size: clamp(1.35rem, 3.2vw, 1.85rem);
+  letter-spacing: 0.06em;
+  line-height: 1;
 }
 
 .btn {
@@ -436,6 +437,10 @@ a {
 }
 
 @media (max-width: 768px) {
+  .logo {
+    font-size: clamp(1.6rem, 7vw, 2rem);
+  }
+
   .about__grid {
     grid-template-columns: 1fr;
   }
