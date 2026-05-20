@@ -334,9 +334,14 @@ a {
   transition: background 0.2s ease, transform 0.15s ease;
 }
 
-.btn--form:hover {
+.btn--form:hover:not(:disabled) {
   background: var(--purple-hover);
   transform: translateY(-1px);
+}
+
+.btn--form:disabled {
+  opacity: 0.65;
+  cursor: wait;
 }
 
 .footer__form-status {

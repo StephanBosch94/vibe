@@ -230,7 +230,7 @@
                 class="footer__input"
                 type="text"
                 id="contact-name"
-                name="name"
+                name="ime"
                 autocomplete="name"
                 required
               />
@@ -256,7 +256,7 @@
                 required
               ></textarea>
             </div>
-            <button class="btn btn--form" type="submit">Pošalji</button>
+            <button class="btn btn--form" type="submit" id="contact-form-submit">Pošalji</button>
             <p class="footer__form-status" id="contact-form-status" role="status" aria-live="polite"></p>
           </form>
         </section>
@@ -319,17 +319,39 @@
       (function () {
         var form = document.getElementById("contact-form");
         var status = document.getElementById("contact-form-status");
-        if (!form || !status) return;
+        var submitBtn = document.getElementById("contact-form-submit");
+        if (!form || !status || !submitBtn) return;
+
+        function setStatus(message, type) {
+          status.textContent = message;
+          status.className = "footer__form-status";
+          if (type === "success") {
+            status.classList.add("footer__form-status--success");
+          } else if (type === "error") {
+            status.classList.add("footer__form-status--error");
+          }
+        }
 
         form.addEventListener("submit", function (event) {
           event.preventDefault();
-          status.textContent = "";
-          status.className = "footer__form-status";
+
+          var fd = new FormData(form);
+          var ime = String(fd.get("ime") || "").trim();
+          var email = String(fd.get("email") || "").trim();
+          var message = String(fd.get("message") || "").trim();
+
+          if (!ime || !email || !message) {
+            setStatus("Popunite sva polja.", "error");
+            return;
+          }
+
+          setStatus("Šalje se…", null);
+          submitBtn.disabled = true;
 
           var data = {
-            name: form.name.value.trim(),
-            email: form.email.value.trim(),
-            message: form.message.value.trim(),
+            name: ime,
+            email: email,
+            message: message,
             _subject: "Vibe Festival — kontakt forma",
             _template: "table",
           };
@@ -344,14 +366,20 @@
           })
             .then(function (response) {
               if (!response.ok) throw new Error("submit failed");
+              return response.json();
+            })
+            .then(function () {
               form.reset();
-              status.textContent = "Poruka je poslata. Javićemo ti se uskoro.";
-              status.className = "footer__form-status footer__form-status--success";
+              setStatus("Poruka je poslata. Javićemo ti se uskoro.", "success");
             })
             .catch(function () {
-              status.textContent =
-                "Slanje nije uspelo. Piši nam na stephanbosch94@gmail.com.";
-              status.className = "footer__form-status footer__form-status--error";
+              setStatus(
+                "Slanje nije uspelo. Piši nam na stephanbosch94@gmail.com.",
+                "error"
+              );
+            })
+            .finally(function () {
+              submitBtn.disabled = false;
             });
         });
       })();
