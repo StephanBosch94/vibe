@@ -257,14 +257,6 @@
       form.addEventListener("submit", function (event) {
         event.preventDefault();
 
-        if (
-          WEB3FORMS_ACCESS_KEY === "22341525-3e67-43c3-a8ee-1a35b31dd545" ||
-          !WEB3FORMS_ACCESS_KEY
-        ) {
-          setStatus("Kontakt forma nije podešena. Javi se na stephanbosch94@gmail.com.", "error");
-          return;
-        }
-
         var fd = new FormData(form);
         var ime = String(fd.get("ime") || "").trim();
         var email = String(fd.get("email") || "").trim();
