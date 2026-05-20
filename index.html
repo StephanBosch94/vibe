@@ -180,7 +180,7 @@
     <div class="site-container footer__main">
       <section class="footer__form-block" aria-labelledby="footer-form-title">
         <h2 class="footer__form-title" id="footer-form-title">Kontakt</h2>
-        <form class="footer__form" id="contact-form" novalidate>
+        <form class="footer__form" id="contact-form">
           <div class="footer__form-row">
             <label class="footer__label" for="contact-name">Ime</label>
             <input class="footer__input" type="text" id="contact-name" name="ime" autocomplete="name" required />
@@ -255,6 +255,9 @@
       }
 
       form.addEventListener("submit", function (event) {
+        if (!form.checkValidity()) {
+          return;
+        }
         event.preventDefault();
 
         var fd = new FormData(form);
@@ -265,11 +268,6 @@
 
         if (botcheck) {
           setStatus("Slanje nije uspelo.", "error");
-          return;
-        }
-
-        if (!ime || !email || !message) {
-          setStatus("Popunite sva polja.", "error");
           return;
         }
 
